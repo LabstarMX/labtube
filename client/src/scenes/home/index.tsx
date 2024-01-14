@@ -7,24 +7,17 @@ import VidCard from "@/shared/VidCard";
 
 
 
-type Props = {
-    // setSelectedPage: (value: SelectedPage) => void;
-    // dataType: string; //ADDED BY LABSTAR
-    // formatName: string;
-}
 
 
-
-
-
-const Home = ({  }: Props) => {
+const Home = () => {
   const [urlValue, setUrlValue] = useState("");
   const [data, setData] = useState<AxiosResponse | null >(null);
   const isAboveMediumScreens = useMediaQuery("(min-width: 1060px)");
-  const inputBox = document.querySelector(".user-input");
+  const inputBox = document.querySelector("#user-input");
   const handleDownload = async () => {
     const data = await axios.get(
-      `http://localhost:4000/download?url=${urlValue}`
+      // `http://localhost:4000/download?url=${urlValue}`
+      `https://labtube-backend.onrender.com/download?url=${urlValue}`
     );
     // console.log("🚀 ~ file: index.tsx:29 ~ handleDownload ~ data:", data)
     
@@ -34,17 +27,17 @@ const Home = ({  }: Props) => {
 
   function handleKeypress(event: any) {
     event.keyCode === 13 ? handleDownload() : null;
-    console.log("enter key pressed");
+    // console.log("enter key pressed");
   }
   inputBox?.addEventListener('keypress', handleKeypress);
   return (
     <section id="home"  
             className="h-full bg-gradient-to-r from-cyan-500 via-blue-300 to-blue-500
-                      px-5 py-20"   
+                      px-5 py-20 "   
     > { isAboveMediumScreens 
     ? (
       <div className="flex flex-col items-center
-            justify-center h-full w-full ">
+            justify-center h-full w-full pt-11 border ">
 
         <div className="text-center font-montserrat text-[3.3rem] mb-9 flex 
         items-center justify-center gap-4 ">
@@ -59,9 +52,9 @@ const Home = ({  }: Props) => {
         </div>
 
         <div className="text-center flex gap-5 mb-20 w-[50%] ">
-          <input type="text" placeholder="Enter url" value={urlValue}
+          <input type="text" placeholder="Enter url" value={urlValue} id="user-input"
                   onChange={(e) => setUrlValue(e.target.value)}
-                  className=" user-input py-2 px-3 text-white font-bold rounded bg-transparent 
+                  className=" py-2 px-3 text-white font-bold rounded bg-transparent 
                       outline outline-none border border-bottom-gray-300 w-4/6
                       placeholder:text-white
                       
@@ -69,15 +62,16 @@ const Home = ({  }: Props) => {
           />
           <button className="rounded-md  px-5 py-2 active:bg-black w-2/6
                       bg-white text-black text-center active:text-white
-                        hover:bg-gray-300 hover:text-red-700
+                        hover:bg-gray-300 hover:text-red-700 active:scale-[0.9]
+                        
                       "
+                  style={{ transition: 'all .3s' }}
                   onClick={handleDownload}
           >
             download
-          </button>
-          
-                      
+          </button>                    
         </div>
+
         <div className="mx-auto">
           {data !== null ? (
             <div>
@@ -85,12 +79,13 @@ const Home = ({  }: Props) => {
                 <iframe
                   width="570"
                   height="320"
-                  src={`${data['data']['url']}`}
+                  // src={`${data['data']['url']}`}
+                  src={`${data.data.url}`}
                   title="video"
                 />
               </div>
               <div className="grid grid-cols-6 gap-9 my-20">
-                {data?.['data'].info.map((formatName: any, index: any) => (
+                {data?.data.info.map((formatName: any, index: any)  => (
                   <div key={index}>
                     <VidCard formatName={formatName} />
                   </div>
@@ -128,8 +123,9 @@ const Home = ({  }: Props) => {
           />
           <button className="rounded-md px-1 py-2 active:bg-black w-2/6 text-[85%]
                       bg-white text-black text-center active:text-white
-                      hover:bg-gray-300 hover:text-red-700
+                      hover:bg-gray-300 hover:text-red-700 active:scale-[0.9] hover:text-xl
                       "
+                  style={{ transition: 'all .3s' }}
                   onClick={handleDownload}
           >
             download
